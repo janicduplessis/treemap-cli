@@ -8,7 +8,7 @@ const path = require("path");
 
 const dir = process.argv[2] || ".";
 
-const res = execSync(`du -a ${dir}`);
+const res = execSync(`du -ak ${dir}`);
 
 const files = res
   .toString()
@@ -17,11 +17,7 @@ const files = res
   .map(l => {
     const parts = l.split(/\s+/);
     const size = parseInt(parts[0], 10);
-    return [
-      parts[1],
-      `${path.dirname(parts[1])} (${humanFileSize(size)})`,
-      parseInt(parts[0], 10)
-    ];
+    return [parts[1], path.dirname(parts[1]), parseInt(parts[0], 10)];
   });
 
 // Last file is root so we need to set parent to null.
@@ -65,7 +61,7 @@ const template = `
           return (
             (size / Math.pow(1024, i)).toFixed(2) * 1 +
             " " +
-            ["B", "kB", "MB", "GB", "TB"][i]
+            ["KB", "MB", "GB", "TB"][i]
           );
         }
 
