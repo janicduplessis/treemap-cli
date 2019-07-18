@@ -15,12 +15,12 @@ const files = res
   .split("\n")
   .filter(l => l.length > 0)
   .map(l => {
-    const match = /(\d)\s+\.(.*)/.exec(l);
+    const match = /(\d)\s+([^\s].*)/.exec(l);
     if (!match) {
       throw new Error("Invalid line " + l);
     }
     const size = parseInt(match[1], 10);
-    const relativePath = "./" + path.relative(dir, "." + match[2]);
+    const relativePath = "./" + path.relative(dir, match[2]);
     return [relativePath, path.dirname(relativePath), size];
   });
 
