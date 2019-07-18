@@ -20,7 +20,6 @@ const files = res
     const relativePath = "./" + path.relative(dir, parts[1]);
     return [relativePath, path.dirname(relativePath), parseInt(parts[0], 10)];
   });
-console.log(files.slice(-10));
 
 // Last file is root.
 files[files.length - 1][0] = ".";
