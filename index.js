@@ -16,7 +16,12 @@ const files = res
   .filter(l => l.length > 0)
   .map(l => {
     const parts = l.split(/\s+/);
-    return [parts[1], path.dirname(parts[1]), parseInt(parts[0], 10)];
+    const size = parseInt(parts[0], 10);
+    return [
+      parts[1],
+      `${path.dirname(parts[1])} (${humanFileSize(size)})`,
+      parseInt(parts[0], 10)
+    ];
   });
 
 // Last file is root so we need to set parent to null.
@@ -52,7 +57,26 @@ const template = `
           headerHeight: 15,
           fontColor: 'black',
           showScale: true,
+          generateTooltip: showFullTooltip
         });
+
+        function humanFileSize(size) {
+          const i = Math.floor(Math.log(size) / Math.log(1024));
+          return (
+            (size / Math.pow(1024, i)).toFixed(2) * 1 +
+            " " +
+            ["B", "kB", "MB", "GB", "TB"][i]
+          );
+        }
+
+        function showFullTooltip(row, size, value) {
+          return \`
+            <div style="background:#fd9; padding:10px; border-style:solid">
+              <span style="font-family:sans-serif">
+                \${data.getValue(row, 0)} (\${humanFileSize(size)})
+              </span>
+            </div>\`;
+        }
       }
     </script>
   </head>
