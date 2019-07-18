@@ -17,10 +17,13 @@ const files = res
   .map(l => {
     const parts = l.split(/\s+/);
     const size = parseInt(parts[0], 10);
-    return [parts[1], path.dirname(parts[1]), parseInt(parts[0], 10)];
+    const relativePath = "./" + path.relative(dir, parts[1]);
+    return [relativePath, path.dirname(relativePath), parseInt(parts[0], 10)];
   });
+console.log(files.slice(-10));
 
-// Last file is root so we need to set parent to null.
+// Last file is root.
+files[files.length - 1][0] = ".";
 files[files.length - 1][1] = null;
 
 const data = [["A", "B", "C"], ...files];
