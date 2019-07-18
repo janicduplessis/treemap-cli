@@ -15,10 +15,13 @@ const files = res
   .split("\n")
   .filter(l => l.length > 0)
   .map(l => {
-    const parts = l.split(/\s+/);
-    const size = parseInt(parts[0], 10);
-    const relativePath = "./" + path.relative(dir, parts[1]);
-    return [relativePath, path.dirname(relativePath), parseInt(parts[0], 10)];
+    const match = /(\d)\s+\.(.*)/.exec(l);
+    if (!match) {
+      throw new Error("Invalid line " + l);
+    }
+    const size = parseInt(match[1], 10);
+    const relativePath = "./" + path.relative(dir, "." + match[2]);
+    return [relativePath, path.dirname(relativePath), size];
   });
 
 // Last file is root.
